@@ -1,22 +1,41 @@
-const BASE_URL = 'https://api.thecatapi.com/v1/';
+import axios from 'axios';
 
-function fetchBreeds() {
-  return fetch(`${BASE_URL}breeds`).then(resp => {
-    if (!resp.ok) {
-      throw new Error(resp.statusText);
-    }
-    return resp.json();
-  });
+// console.log(axios);
+// // Встановлення ключа доступу
+axios.defaults.headers.common['x-api-key'] =
+  'live_75boB13uQFHVfq8JZu0TnK4QStc1xqOJ5R4qsaTr6UOIjfrvFqlSrXzFHM4VPxnR';
+
+export function fetchBreeds() {
+  return fetch('https://api.thecatapi.com/v1/breeds')
+    .then(response => {
+      return response.json();
+    })
+    .catch(error => {
+      console.log(error);
+    });
 }
 
-// function fetchCatByBreed(breedId) {
-//   return fetch(`${BASE_URL}images/search?breed_ids=${breedId}`).then(res => {
-//     if (!res.ok) {
-//       throw new Error(res.statusText);
-//     }
-//     return res.json();
+// fetch(`https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=`)
+//   .then(response => {
+//     return response.json();
+//   })
+//   .then(img => {
+//     console.log(img);
+//   })
+//   .catch(error => {
+//     console.log(error);
 //   });
-// }
 
-export default fetchBreeds;
-// export default fetchCatByBreed;
+export function fetchCatByBreed(breedId) {
+  return fetch(
+    `https://api.thecatapi.com/v1/images/search?limit=10&breed_ids=${breedId}`
+  )
+    .then(res => {
+      return res.json();
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+// export default { fetchBreeds, fetchCatByBreed };
