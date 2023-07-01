@@ -1,89 +1,22 @@
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 import SlimSelect from 'slim-select';
+import SimpleLightbox from 'simplelightbox';
 
 const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
 const error = document.querySelector('.error');
 const catInfo = document.querySelector('.cat-info');
 
-// const paragraph = document.createElement('p');
-// catInfo.appendChild(paragraph);
-
-// const image = document.createElement('img');
-// catInfo.appendChild(image);
-
-// catInfo.style.display = 'flex';
-// let breed;
-
-// fetchBreeds()
-//   .then(data => {
-//     console.log(data);
-//     let breed;
-
-//     breed = data.map(breeds => ({
-//       value: breeds.id,
-//       label: breeds.name,
-//       description: breeds.description,
-//       temperament: breeds.temperament,
-//     }));
-
-//     breed.forEach(breed => {
-//       const option = document.createElement('option');
-//       option.value = breed.value;
-//       option.text = breed.label;
-//       breedSelect.appendChild(option);
-//     });
-
-//     breedSelect.addEventListener('change', handleChoice);
-
-//     function handleChoice(evt) {
-//       let breedId = evt.target.value;
-//       //
-//       console.log(breed);
-
-//       fetchCatByBreed(breedId).then(el => {
-//         breed = breed.map(breeds => ({
-//           description: breeds.description,
-//           temperament: breeds.temperament,
-//         }));
-
-//         console.log(breed.description);
-
-//         catInfo.innerHTML = '';
-//         console.log(el);
-//         el.forEach(img => {
-//           const image = document.createElement('img');
-//           image.src = img.url;
-//           catInfo.appendChild(image);
-//           console.dir(image);
-//         });
-
-//         const paragraph = document.createElement('p');
-//         catInfo.appendChild(paragraph);
-//         console.log(breed.description);
-//         if (breedId === breed.value) {
-//           paragraph.textContent = breed.description;
-//         }
-//         console.dir(paragraph);
-//       });
-//     }
-//   })
-//   .catch(err => console.log(err));
-
-// new SlimSelect({
-//   select: '#breed-select',
-//   settings: {
-//     contentPosition: 'absolute',
-//   },
-// });
 new SlimSelect('#breed-select', {
   contentPosition: 'relative',
-  // placeholderText: 'Custom Placeholder Text',
 });
 
+hideLoader();
+
+// new SimpleLightbox('.cat-list a', {});
+// console.log(catList);
 fetchBreeds()
   .then(data => {
-    // console.log(data);
     let breed;
 
     breed = data.map(breeds => ({
@@ -97,85 +30,69 @@ fetchBreeds()
 
     breed.forEach(breed => {
       breedSelect.innerHTML += `<option value='${breed.value}'>${breed.label}</option>`;
-      // const option = document.createElement('option');
-      // option.value = breed.value;
-      // option.text = breed.label;
-      // breedSelect.appendChild(option);
     });
 
     breedSelect.addEventListener('change', handleChoice);
 
     function handleChoice(evt) {
+      catInfo.innerHTML = '';
+      // hideCatInfo();
+      showLoader();
+      evt.preventDefault();
       let breedId = evt.target.value;
       const selectedBreed = breed.find(breed => breed.value === breedId);
 
-      // console.log(selectedBreed.description);
-      // console.log(selectedBreed.temperament);
-      // console.log(selectedBreed.label);
-
       fetchCatByBreed(breedId)
         .then(el => {
-          catInfo.innerHTML = '';
-          console.log(el);
+          // catInfo.innerHTML = '';
+
+          // catInfo.innerHTML = '<div class="cat-list"></div>';
+          // const catList = document.querySelector('.cat-list');
+
           el.forEach(img => {
             catInfo.innerHTML += `<img class="cat-picture" src=${img.url}></img>`;
-            // const image = document.createElement('img');
-            // image.src = img.url;
-            // catInfo.appendChild(image);
-            // console.dir(image);
+
+            // catList.innerHTML += `<a href="${img.url}"><img class="cat-picture" src="${img.url}" alt="" title="Cat"/></a>`;
+
+            // new SimpleLightbox('cat-info .cat-list a', {});
           });
+
+          // console.log(catList);
+
           const newHtml = `<div class='cat-descr'>
           <p class='name'>${selectedBreed.label}</p>
           <p class='description'>${selectedBreed.description}</p>
           <p class='features'>${selectedBreed.temperament}</p>
           </div >`;
 
-          // const paragraph1 = document.createElement('p');
-          // const paragraph2 = document.createElement('p');
-          // const paragraph3 = document.createElement('p');
-          // catInfo.appendChild(paragraph1);
-          // catInfo.appendChild(paragraph2);
-          // catInfo.appendChild(paragraph3);
-
           if (selectedBreed) {
             catInfo.innerHTML += newHtml;
-            // paragraph1.textContent = selectedBreed.label;
-            // paragraph2.textContent = selectedBreed.description;
-            // paragraph3.textContent = selectedBreed.temperament;
           }
-          console.dir(paragraph2);
+
+          hideLoader();
         })
         .catch(err => console.log(err));
     }
   })
   .catch(err => console.log(err));
 
-// breedSelect.addEventListener('change', evt => {
-//   let breedId = evt.target.value;
+function hideCatInfo() {
+  // catImage.src = '';
+  // breedName.textContent = '';
+  // description.textContent = '';
+  // temperament.textContent = '';
+  catInfo.style.display = 'none';
+}
 
-//   fetchCatByBreed(breedId)
-//     .then(el => {
-//       catInfo.innerHTML = '';
-//       console.log(el);
-//       el.forEach(img => {
-//         const image = document.createElement('img');
-//         image.src = img.url;
-//         catInfo.appendChild(image);
-//         console.dir(image);
-//       });
-//       fetchBreeds() {
+// // Show loader
+function showLoader() {
+  loader.style.display = 'block';
+}
 
-// }
-//       const paragraph = document.createElement('p');
-//       catInfo.appendChild(paragraph);
-//       console.log(breed.description);
-//       if (breedId === breed.value) {
-//         paragraph.textContent = breed.description;
-//       }
-//       console.dir(paragraph);
-//     })
-//     .catch(err => console.log(err));
-// });
+// // Hide loader
+function hideLoader() {
+  loader.style.display = 'none';
+}
 
 /// // Fetch and populate the breed select options
 // function populateBreeds() {
