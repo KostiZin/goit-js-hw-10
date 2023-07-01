@@ -9,6 +9,9 @@ const API_KEY =
 export function fetchBreeds() {
   return fetch('https://api.thecatapi.com/v1/breeds')
     .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
       return response.json();
     })
     .catch(error => {
@@ -21,11 +24,12 @@ export function fetchCatByBreed(breedId) {
     `https://api.thecatapi.com/v1/images/search?limit=3&breed_ids=${breedId}&api_key=${API_KEY}`
   )
     .then(res => {
+      if (!res.ok) {
+        throw new Error(res.status);
+      }
       return res.json();
     })
     .catch(error => {
       console.log(error);
     });
 }
-
-// export default { fetchBreeds, fetchCatByBreed };

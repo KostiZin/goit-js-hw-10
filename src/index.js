@@ -1,6 +1,7 @@
 import { fetchBreeds, fetchCatByBreed } from './cat-api.js';
 import SlimSelect from 'slim-select';
 import SimpleLightbox from 'simplelightbox';
+import Notiflix from 'notiflix';
 
 const breedSelect = document.querySelector('.breed-select');
 const loader = document.querySelector('.loader');
@@ -17,6 +18,7 @@ hideLoader();
 // console.log(catList);
 fetchBreeds()
   .then(data => {
+    hideError();
     let breed;
 
     breed = data.map(breeds => ({
@@ -46,11 +48,13 @@ fetchBreeds()
         .then(el => {
           // catInfo.innerHTML = '';
 
-          // catInfo.innerHTML = '<div class="cat-list"></div>';
+          // catInfo.innerHTML = '';
           // const catList = document.querySelector('.cat-list');
 
           el.forEach(img => {
-            catInfo.innerHTML += `<img class="cat-picture" src=${img.url}></img>`;
+            // catInfo.innerHTML += `<img class="cat-picture" src=${img.url}></img>`;
+
+            catInfo.innerHTML += `<div class="cat-list"><img class="cat-picture" src=${img.url}></img></div>`;
 
             // catList.innerHTML += `<a href="${img.url}"><img class="cat-picture" src="${img.url}" alt="" title="Cat"/></a>`;
 
@@ -71,10 +75,14 @@ fetchBreeds()
 
           hideLoader();
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          showError();
+        });
     }
   })
-  .catch(err => console.log(err));
+  .catch(err => {
+    showError();
+  });
 
 function hideCatInfo() {
   // catImage.src = '';
@@ -93,6 +101,16 @@ function showLoader() {
 function hideLoader() {
   loader.style.display = 'none';
 }
+
+// Show error message
+function showError() {
+  Notiflix.Notify.failure('Something is wrong');
+}
+
+// // Hide error message
+// function hideError() {
+//   error.style.display = 'none';
+// }
 
 /// // Fetch and populate the breed select options
 // function populateBreeds() {
@@ -174,10 +192,10 @@ function hideLoader() {
 //   error.style.display = 'block';
 // }
 
-// // Hide error message
-// function hideError() {
-//   error.style.display = 'none';
-// }
+// Hide error message
+function hideError() {
+  error.style.display = 'none';
+}
 
 // // Initialize the app
 // function initApp() {
