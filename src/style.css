@@ -4,10 +4,17 @@ body {
   background: #eee;
 }
 
+ul,
+li {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+
+}
+
 .container {
   max-width: 1700px;
   margin: 0 auto;
-
 }
 
 
@@ -56,9 +63,15 @@ body {
 
 }
 
-.cat-list img {
+.cat-picture img {
   width: auto;
   height: 500px;
+  display: block;
+
+}
+
+.cat-list {
+  list-style: none;
 }
 
 

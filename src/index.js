@@ -24,11 +24,15 @@ fetchBreeds()
       temperament: breeds.temperament,
     }));
 
-    breedSelect.innerHTML = `<option value=''>Choose your cat</option>`;
+    // breedSelect.innerHTML = `<option value=''>Choose your cat</option>`;
+
+    let markup = `<option value=''>Choose your cat</option>`;
 
     breed.forEach(breed => {
-      breedSelect.innerHTML += `<option value='${breed.value}'>${breed.label}</option>`;
+      markup += `<option value='${breed.value}'>${breed.label}</option>`;
     });
+
+    breedSelect.innerHTML = markup;
 
     breedSelect.addEventListener('change', handleChoice);
 
@@ -42,9 +46,12 @@ fetchBreeds()
 
       fetchCatByBreed(breedId)
         .then(el => {
+          let markupLi = '';
+
           el.forEach(img => {
-            catInfo.innerHTML += `<div class="cat-list"><img class="cat-picture" src=${img.url}></img></div>`;
+            markupLi += `<li class="cat-picture"><img src=${img.url}></img></li>`;
           });
+          let markupUl = '<ul class="cat-list">' + markupLi + '</ul>';
 
           const newHtml = `<div class='cat-descr'>
           <p class='name'>${selectedBreed.label}</p>
@@ -53,7 +60,7 @@ fetchBreeds()
           </div >`;
 
           if (selectedBreed) {
-            catInfo.innerHTML += newHtml;
+            catInfo.innerHTML += markupUl + newHtml;
           }
 
           hideLoader();
@@ -64,7 +71,9 @@ fetchBreeds()
     }
   })
   .catch(err => {
-    Notiflix.Notify.failure('Something is wrong');
+    Notiflix.Notify.failure(
+      'Oops! Something went wrong! Try reloading the page!'
+    );
   });
 
 function showLoader() {
